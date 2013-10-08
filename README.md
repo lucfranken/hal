@@ -14,6 +14,7 @@ require_once 'vendor/autoload.php';
 use Nocarrier\Hal;
 
 $hal = new Hal('/orders');
+$hal->addForm('create-order', $form);
 $hal->addLink('next', '/orders?page=2');
 $hal->addLink('search', '/orders?id={order_id}');
 
