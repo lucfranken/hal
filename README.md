@@ -13,10 +13,10 @@ require_once 'vendor/autoload.php';
 
 use Nocarrier\Hal;
 
-$form=array();
+$createUserForm=array();
 
 $hal = new Hal('/orders');
-$hal->addForm('create-order', $form);
+$hal->addForm('create-order', $createUserForm);
 $hal->addLink('next', '/orders?page=2');
 $hal->addLink('search', '/orders?id={order_id}');
 
