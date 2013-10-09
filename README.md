@@ -16,7 +16,24 @@ use Nocarrier\Hal;
 $createUserForm=array();
 
 $hal = new Hal('/orders');
-$hal->addForm('create-order', $createUserForm);
+
+//forms
+$editForm=[
+	'title' => 'Edit an order',
+	'method' => 'POST',
+	'target' => $hal->getUri(),
+	'fields' => [
+		'name' => [
+			'type' => 'Text',
+			'validators' => [
+				'Required',
+			]
+		]
+	]
+];
+$hal->addForm('edit', $editForm);
+
+//links
 $hal->addLink('next', '/orders?page=2');
 $hal->addLink('search', '/orders?id={order_id}');
 
