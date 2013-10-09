@@ -95,6 +95,32 @@ class HalJsonRenderer implements HalRenderer
     }
 
     /**
+     * Return an array (compatible with the hal+json format) representing
+     * associated forms.
+     *
+     * @param mixed $uri
+     * @param array $forms
+     * @return array
+     */
+    protected function formsForJson($uri, $forms)
+    {
+        $data = array();
+        foreach($forms as $rel => $form) {
+            $data[$rel] = $form->getForm();
+            /*
+            foreach ($links as $link) {
+                $item = array('href' => $link->getUri());
+                foreach ($link->getAttributes() as $attribute => $value) {
+                    $item[$attribute] = $value;
+                }
+                $data[$rel][] = $item;
+            }
+            */
+        }
+        return $data;
+    }
+
+    /**
      * Remove the @ prefix from keys that denotes an attribute in XML. This
      * cannot be represented in JSON, so it's effectively ignored.
      *
@@ -140,6 +166,11 @@ class HalJsonRenderer implements HalRenderer
         $links = $this->linksForJson($resource->getUri(), $resource->getLinks());
         if (count($links)) {
             $data['_links'] = $links;
+        }
+
+        $forms = $this->formsForJson($resource->getUri(), $resource->getForms());
+        if (count($forms)) {
+            $data['_forms'] = $forms;
         }
 
         foreach($resource->getResources() as $rel => $resources) {

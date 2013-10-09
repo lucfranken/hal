@@ -59,6 +59,18 @@ class Hal
     protected $links = null;
 
     /**
+     * A collection of \Nocarrier\HalForm objects keyed by the form relation to
+     * this resource.
+     *
+     * array(
+     *     'create-order' => [HalForm]
+     * )
+     *
+     * @var array
+     */
+    protected $forms = null;
+
+    /**
      * Construct a new Hal object from an array of data. You can markup the
      * $data array with certain keys and values in order to affect the
      * generated JSON or XML documents if required to do so.
@@ -83,6 +95,7 @@ class Hal
         $this->data = $data;
 
         $this->links = new HalLinkContainer();
+        $this->forms = new HalFormContainer();
     }
 
     /**
@@ -187,6 +200,21 @@ class Hal
     }
 
     /**
+     * Add a form to the resource, identified by $name, located at $uri.
+     *
+     * @param string $rel
+     * @param string $uri
+     * @param array $attributes
+     *   Other attributes, as defined by HAL spec and RFC 5988.
+     * @return \Nocarrier\Hal
+     */
+    public function addForm($rel, $form, array $attributes = array())
+    {
+        $this->forms[$rel] = new HalForm($form, $attributes);
+        return $this;
+    }
+
+    /**
      * Add an embedded resource, identified by $rel and represented by $resource.
      *
      * @param string $rel
@@ -223,6 +251,17 @@ class Hal
     }
 
     /**
+     * Return an array of Nocarrier\HalForm objects representing resources
+     * related to this one.
+     *
+     * @return array A collection of \Nocarrier\HalForm
+     */
+    public function getForms()
+    {
+        return $this->forms;
+    }
+
+    /**
      * Lookup and return an array of HalLink objects for a given relation.
      * Will also resolve CURIE rels if required.
      *
@@ -233,6 +272,19 @@ class Hal
     public function getLink($rel)
     {
         return $this->links->get($rel);
+    }
+
+    /**
+     * Lookup and return an array of HalLink objects for a given relation.
+     * Will also resolve CURIE rels if required.
+     *
+     * @param string $rel The link relation required
+     * @return array|bool
+     *   Array of HalLink objects if found. Otherwise false.
+     */
+    public function getForm($rel)
+    {
+        return $this->forms->get($rel);
     }
 
     /**
