@@ -323,6 +323,21 @@ class Hal
     }
 
     /**
+     * Return the current object in a text/html format (links and
+     * resources).
+     *
+     * @param bool $pretty
+     *   Enable pretty-printing.
+     * @return string
+     */
+    public function asHtml($pretty = false)
+    {
+        $renderer = new HalHtmlRenderer();
+
+        return $renderer->render($this, $pretty);
+    }
+
+    /**
      * Return the current object in a application/hal+xml format (links and
      * resources).
      *
